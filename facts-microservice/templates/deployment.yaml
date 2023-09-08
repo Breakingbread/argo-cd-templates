@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: facts-microservice-deployment
+  labels:
+    app: facts-microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: facts-microservice
+  template:
+    metadata:
+      labels:
+        app: facts-microservice
+    spec:
+      containers:
+        - name: facts-microservice
+          image: ghcr.io/breakingbread/facts-microservice:11
+          ports:
+            - containerPort: 8080

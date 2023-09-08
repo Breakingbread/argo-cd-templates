@@ -1,0 +1,16 @@
+apiVersion: v2
+name: myginapp
+description: A Helm chart for Kubernetes
+
+image:
+  repository: ""
+  tag: latest
+  pullPolicy: IfNotPresent
+
+env:
+  - name: REQUEST_URL
+    value: "uselessfacts.jsph.pl/api/v2/facts/random"
+
+service:
+  type: ClusterIP
+  port: 8080

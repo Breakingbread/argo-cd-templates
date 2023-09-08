@@ -1,0 +1,16 @@
+apiVersion: v2
+name: myginapp
+description: A Helm chart for Kubernetes
+
+image:
+  repository: myginapp
+  tag: latest
+  pullPolicy: IfNotPresent
+
+env:
+  - name: REQUEST_URL
+    value: "https://api.chucknorris.io/jokes/random"
+
+service:
+  type: ClusterIP
+  port: 8080
