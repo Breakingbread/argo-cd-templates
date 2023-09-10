@@ -5,10 +5,25 @@ on:
     types: [patch_version]
 
 jobs:
-  receiver:
+  update-helm:
     runs-on: ubuntu-latest
     steps:
-      - name: An event received
+      - uses: actions/checkout@v3
+
+      - name: Parse payload
         run: |
-          echo "payload Foo '${{ github.event.client_payload.foo }}'"
-               
+          echo "version=${{ github.event.client_payload.version }}" >> "$GITHUB_ENV"
+          echo "Application Version: $version"
+
+      - name: Patch helm
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          sed -i "s/appVersion:.*/appVersion: $version/" facts-microservice/Chart.yaml
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add facts-microservice/Chart.yaml
+          git commit -m "Update appVersion to $version"
+          git push
+        
+          
