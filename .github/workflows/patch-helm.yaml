@@ -1,0 +1,14 @@
+name: Triggered Workflow
+
+on:
+  repository_dispatch:
+    types: [patch_version]
+
+jobs:
+  receiver:
+    runs-on: ubuntu-latest
+    steps:
+      - name: An event received
+        run: |
+          echo "payload Foo '${{ github.event.client_payload.foo }}'"
+               
