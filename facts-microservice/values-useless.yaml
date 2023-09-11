@@ -1,16 +1,17 @@
-apiVersion: v2
-name: myginapp
-description: A Helm chart for Kubernetes
+replicaCount: 1
 
 image:
-  repository: ""
-  tag: latest
-  pullPolicy: IfNotPresent
+  repository: 'ghcr.io/breakingbread/facts-microservice'
+containerPort: 8080
 
-env:
-  - name: REQUEST_URL
-    value: "uselessfacts.jsph.pl/api/v2/facts/random"
+readinessProbe:
+  initialDelaySeconds: 10
+  periodSeconds: 5
 
-service:
-  type: ClusterIP
-  port: 8080
+appLabel: useless-application
+
+requestUrl: 'uselessfacts.jsph.pl/api/v2/facts/random'
+
+rules:
+  domain: useless.local
+  path: /uselessfact

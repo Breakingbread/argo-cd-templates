@@ -1,16 +1,19 @@
-apiVersion: v2
-name: myginapp
-description: A Helm chart for Kubernetes
+replicaCount: 1
 
 image:
-  repository: myginapp
-  tag: latest
-  pullPolicy: IfNotPresent
+  repository: 'ghcr.io/breakingbread/facts-microservice'
+containerPort: 8080
 
-env:
-  - name: REQUEST_URL
-    value: "https://api.chucknorris.io/jokes/random"
+readinessProbe:
+  initialDelaySeconds: 10
+  periodSeconds: 5
 
-service:
-  type: ClusterIP
-  port: 8080
+appLabel: funny-application
+
+requestUrl: 'https://api.chucknorris.io/jokes/random'
+
+rules:
+  domain: funnyfact.local
+  path: /funnyfact
+
+

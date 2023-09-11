@@ -1,21 +1,43 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: facts-microservice-deployment
+  name: {{ .Values.appLabel }}-deployment
   labels:
-    app: facts-microservice
+    app: {{ .Values.appLabel }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: facts-microservice
+      app: {{ .Values.appLabel }}
   template:
     metadata:
       labels:
-        app: facts-microservice
+        app: {{ .Values.appLabel }}
     spec:
       containers:
         - name: facts-microservice
-          image: ghcr.io/breakingbread/facts-microservice:11
+          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
           ports:
-            - containerPort: 8080
+            - containerPort: {{ .Values.containerPort }}
+          env:
+          - name: REQUEST_URL
+            value: {{ .Values.requestUrl }}
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: {{ .Values.containerPort }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.appLabel }}-service
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ .Values.appLabel }}
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: {{ .Values.containerPort }}
