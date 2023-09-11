@@ -3,4 +3,4 @@ name: facts-microservice
 description: Dunno what to paste here
 type: application
 version: 0.1.0
-appVersion: 26
+appVersion: 27
